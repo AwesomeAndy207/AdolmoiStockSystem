@@ -11,7 +11,6 @@ TAM_CELDA = 80
 MARGEN = 10
 ORIGEN_X = 100
 ORIGEN_Y = 150
-
 niveles = [
     [
         ["", "", "□", "", "", ""],
@@ -218,7 +217,7 @@ while corriendo:
 
         if ganador:
             fuente_ganador = pygame.font.SysFont(None, 72)
-            texto_ganador = fuente_ganador.render("You win", True, (0, 128, 0))
+            texto_ganador = fuente_ganador.render("¡Ganaste!", True, (0, 128, 0))
             rect_ganador = texto_ganador.get_rect(center=(400, 550))
             pantalla.blit(texto_ganador, rect_ganador)
 
