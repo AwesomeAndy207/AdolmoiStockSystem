@@ -5,6 +5,9 @@ fuente_personalizada = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\
 pantalla = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Adolmoi Stock System")
 
+icono_juego = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\iconojuego.png")
+pygame.display.set_icon(icono_juego)
+
 imagen_titulo = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\Adolmoi.jpg").convert()
 imagen_titulo = pygame.transform.scale(imagen_titulo, (800, 600))
 
