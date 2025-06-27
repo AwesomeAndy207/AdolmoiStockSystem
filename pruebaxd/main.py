@@ -30,9 +30,9 @@ tiempos_por_nivel = [
     40000,  # Nivel 3 - 40s
     45000,  # Nivel 4 - 45s
     50000,  # Nivel 5 - 50s
-    55000,  # Nivel 6 - 55s
-    60000,  # Nivel 7 - 60s
-    70000   # Nivel 8 - 70s
+    50000,  # Nivel 6 - 50s
+    50000,  # Nivel 7 - 50s
+    50000   # Nivel 8 - 50s
 ]
 tiempo_nivel_actual = None
 
@@ -199,13 +199,16 @@ while corriendo:
         texto_nivel = fuente_nivel.render(f"Bodega {indice_nivel + 1}", True, (50, 50, 50))
         pantalla.blit(texto_nivel, (300, 40))
 
-        tiempo_transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
+        if not ganador:
+            tiempo_transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
+        else:
+            tiempo_transcurrido = tiempos_por_nivel[indice_nivel]
         tiempo_restante = max(0, (tiempos_por_nivel[indice_nivel] - tiempo_transcurrido) // 1000)
         fuente_tiempo = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36)
         texto_tiempo = fuente_tiempo.render(f"Tiempo restante: {tiempo_restante}s", True, (255, 0, 0))
         pantalla.blit(texto_tiempo, (550, 20))
 
-        if tiempo_transcurrido >= tiempos_por_nivel[indice_nivel]:
+        if not ganador and tiempo_transcurrido >= tiempos_por_nivel[indice_nivel]:
             estado = "game_over"
 
         estante_ancho = 6 * (TAM_CELDA + MARGEN) + MARGEN
