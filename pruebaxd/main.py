@@ -1,6 +1,35 @@
 import pygame
 
 pygame.init()
+pygame.mixer.init()
+
+def reproducir_musica(ruta, bucle=True, volumen=0.5):
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load(ruta)
+    pygame.mixer.music.set_volume(volumen)
+    pygame.mixer.music.play(-1 if bucle else 0)
+
+def detener_musica():
+    pygame.mixer.music.stop()
+
+musica_actual = None
+
+def cambiar_musica(estado):
+    global musica_actual
+    ruta = musicas.get(estado)
+    if ruta and ruta != musica_actual:
+        reproducir_musica(ruta)
+        musica_actual = ruta
+
+def reproducir_musica(ruta, bucle=True, volumen=0.5):
+    global musica_actual
+    if musica_actual != ruta:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load(ruta)
+        pygame.mixer.music.set_volume(volumen)
+        pygame.mixer.music.play(-1 if bucle else 0)
+        musica_actual = ruta
+
 fuente_personalizada = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
 pantalla = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Adolmoi Stock System")
@@ -23,12 +52,22 @@ imagen_fin = pygame.transform.scale(imagen_fin, (800, 600))
 estado = "intro"
 tiempo_inicio = pygame.time.get_ticks()
 
+musicas = {
+    "intro": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Splash Screen.mp3",
+    "titulo": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Titulo.mp3",
+    "instrucciones": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\musica\\Instrucciones.mp3",
+    "nivel": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Nivel.mp3",
+    "alarma": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Alarma.mp3",
+    "gameover": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Game Over.mp3",
+    "fin": "C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Fin.mp3"
+}
+
 TAM_CELDA = 80
 MARGEN = 10
 ORIGEN_X = 100
 ORIGEN_Y = 150
 tiempos_por_nivel = [
-    20000,  # Nivel 1 - 20s
+    35000,  # Nivel 1 - 35s
     35000,  # Nivel 2 - 35s
     40000,  # Nivel 3 - 40s
     45000,  # Nivel 4 - 45s
@@ -83,7 +122,6 @@ while corriendo:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             corriendo = False
-
         if estado == "titulo" and evento.type == pygame.MOUSEBUTTONDOWN:
             if boton_jugar and boton_jugar.collidepoint(evento.pos):
                 estado = "instrucciones"
@@ -150,16 +188,18 @@ while corriendo:
                 tiempo_ganador = None
 
     if estado == "intro":
+        cambiar_musica("intro")
         pantalla.fill((0, 0, 0))
         fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 60)
         texto = fuente.render("AndyGames Presenta", True, (0, 0, 128))
         texto_rect = texto.get_rect(center=(400, 300))
         pantalla.blit(texto, texto_rect)
 
-        if pygame.time.get_ticks() - tiempo_inicio > 2000:
+        if pygame.time.get_ticks() - tiempo_inicio > 3000:
             estado = "titulo"
 
     elif estado == "titulo":
+        cambiar_musica("titulo")
         pantalla.blit(imagen_titulo, (0, 0))
         fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 76)
         texto = fuente.render("Adolmoi Stock System", True, (255, 172, 28))
@@ -174,6 +214,7 @@ while corriendo:
         pantalla.blit(texto_jugar, texto_rect)
 
     elif estado == "instrucciones":
+        cambiar_musica("instrucciones")
         pantalla.blit(imagen_instrucciones, (0, 0))
         fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
         instrucciones = [
@@ -184,6 +225,7 @@ while corriendo:
             "   Triángulo va en la fila de más abajo",
             "- Cada figura solo puede colocarse en su fila correcta",
             "- Ganas cuando todas las formas están en su lugar",
+            "- No dejes que se te acabe el tiempo"
         ]
 
         for i, linea in enumerate(instrucciones):
@@ -196,7 +238,21 @@ while corriendo:
         texto_rect = texto_boton.get_rect(center=boton_instrucciones.center)
         pantalla.blit(texto_boton, texto_rect)
 
+
+        def obtener_tiempo_restante():
+            if tiempo_nivel_actual is None:
+                return None
+            transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
+            return max(0, (tiempos_por_nivel[indice_nivel] - transcurrido) // 1000)
+        
+
+
     elif estado == "bodega_1":
+        tiempo_restante = obtener_tiempo_restante()
+        if tiempo_restante is not None and tiempo_restante <= 15:
+            cambiar_musica("alarma")
+        else:
+            cambiar_musica("nivel")
         pantalla.blit(imagen_bodega, (0, 0))
         fuente_nivel = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 50)
         texto_nivel = fuente_nivel.render(f"Bodega {indice_nivel + 1}", True, (50, 50, 50))
@@ -264,6 +320,7 @@ while corriendo:
                     estado = "fin"
 
     elif estado == "fin":
+        cambiar_musica("fin")
         pantalla.blit(imagen_fin, (0, 0))
         fuente_fin = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
         texto_fin = fuente_fin.render("¡Completaste todas las bodegas!", True, (0, 128, 0))
@@ -276,6 +333,7 @@ while corriendo:
         pantalla.blit(texto_reiniciar, texto_reiniciar.get_rect(center=boton_reinicio.center))
 
     elif estado == "game_over":
+        reproducir_musica("C:\\ruta\\a\\tu\\musica_gameover.mp3", bucle=False)
         pantalla.fill((0, 0, 0))
         fuente_go = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
         texto_go = fuente_go.render("¡Se acabó el tiempo!", True, (255, 0, 0))
