@@ -3,12 +3,6 @@ import pygame
 pygame.init()
 pygame.mixer.init()
 
-def reproducir_musica(ruta, bucle=True, volumen=0.5):
-    pygame.mixer.music.stop()
-    pygame.mixer.music.load(ruta)
-    pygame.mixer.music.set_volume(volumen)
-    pygame.mixer.music.play(-1 if bucle else 0)
-
 def detener_musica():
     pygame.mixer.music.stop()
 
@@ -333,7 +327,7 @@ while corriendo:
         pantalla.blit(texto_reiniciar, texto_reiniciar.get_rect(center=boton_reinicio.center))
 
     elif estado == "game_over":
-        reproducir_musica("C:\\ruta\\a\\tu\\musica_gameover.mp3", bucle=False)
+        reproducir_musica("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Game Over.mp3", bucle=False)
         pantalla.fill((0, 0, 0))
         fuente_go = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
         texto_go = fuente_go.render("¡Se acabó el tiempo!", True, (255, 0, 0))
@@ -344,6 +338,5 @@ while corriendo:
         pygame.draw.rect(pantalla, (50, 50, 200), boton_gameover)
         texto_retry = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Intentar de nuevo", True, (255, 255, 255))
         pantalla.blit(texto_retry, texto_retry.get_rect(center=boton_gameover.center))
-
     pygame.display.flip()
 pygame.quit()
