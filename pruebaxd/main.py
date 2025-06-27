@@ -1,6 +1,7 @@
 import pygame
 
 pygame.init()
+fuente_personalizada = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
 pantalla = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Adolmoi Stock System")
 
@@ -23,6 +24,18 @@ TAM_CELDA = 80
 MARGEN = 10
 ORIGEN_X = 100
 ORIGEN_Y = 150
+tiempos_por_nivel = [
+    20000,  # Nivel 1 - 20s
+    35000,  # Nivel 2 - 35s
+    40000,  # Nivel 3 - 40s
+    45000,  # Nivel 4 - 45s
+    50000,  # Nivel 5 - 50s
+    55000,  # Nivel 6 - 55s
+    60000,  # Nivel 7 - 60s
+    70000   # Nivel 8 - 70s
+]
+tiempo_nivel_actual = None
+
 niveles = [
     [["", "", "□", "", "", ""], ["", "△", "", "○", "", ""], ["", "", "", "", "", ""]],
     [["", "○", "□", "", "", ""], ["△", "", "○", "", "", ""], ["", "□", "△", "", "", ""]],
@@ -47,7 +60,8 @@ tiempo_ganador = None
 
 boton_jugar = None
 boton_instrucciones = None
-boton_reinicio = None  # para la pantalla final
+boton_reinicio = None
+boton_gameover = None
 
 def verificar_ganador(tablero):
     for fila in range(3):
@@ -74,6 +88,7 @@ while corriendo:
         if estado == "instrucciones" and evento.type == pygame.MOUSEBUTTONDOWN:
             if boton_instrucciones and boton_instrucciones.collidepoint(evento.pos):
                 estado = "bodega_1"
+                tiempo_nivel_actual = pygame.time.get_ticks()
 
         if estado == "bodega_1" and not ganador:
             if evento.type == pygame.MOUSEBUTTONDOWN and not arrastrando:
@@ -122,8 +137,9 @@ while corriendo:
                     ganador = True
                     tiempo_ganador = pygame.time.get_ticks()
 
-        if estado == "fin" and evento.type == pygame.MOUSEBUTTONDOWN:
-            if boton_reinicio and boton_reinicio.collidepoint(evento.pos):
+        if estado in ["fin", "game_over"] and evento.type == pygame.MOUSEBUTTONDOWN:
+            if (estado == "fin" and boton_reinicio and boton_reinicio.collidepoint(evento.pos)) or \
+               (estado == "game_over" and boton_gameover and boton_gameover.collidepoint(evento.pos)):
                 estado = "titulo"
                 indice_nivel = 0
                 bodega_1 = [fila[:] for fila in niveles[indice_nivel]]
@@ -132,7 +148,7 @@ while corriendo:
 
     if estado == "intro":
         pantalla.fill((0, 0, 0))
-        fuente = pygame.font.SysFont(None, 60)
+        fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 60)
         texto = fuente.render("AndyGames Presenta", True, (0, 0, 128))
         texto_rect = texto.get_rect(center=(400, 300))
         pantalla.blit(texto, texto_rect)
@@ -142,21 +158,21 @@ while corriendo:
 
     elif estado == "titulo":
         pantalla.blit(imagen_titulo, (0, 0))
-        fuente = pygame.font.SysFont(None, 76)
+        fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 76)
         texto = fuente.render("Adolmoi Stock System", True, (255, 172, 28))
         pantalla.blit(texto, (100, 100))
 
         boton_jugar = pygame.Rect(300, 300, 200, 80)
         pygame.draw.rect(pantalla, (0, 143, 80), boton_jugar)
 
-        fuente_boton = pygame.font.SysFont(None, 20)
+        fuente_boton = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf",20)
         texto_jugar = fuente_boton.render("Comenzar a ordenar stocks", True, (0, 0, 0))
         texto_rect = texto_jugar.get_rect(center=boton_jugar.center)
         pantalla.blit(texto_jugar, texto_rect)
 
     elif estado == "instrucciones":
         pantalla.blit(imagen_instrucciones, (0, 0))
-        fuente = pygame.font.SysFont(None, 40)
+        fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
         instrucciones = [
             "Instrucciones",
             "- Arrastra las formas en los estantes que corresponden",
@@ -179,9 +195,18 @@ while corriendo:
 
     elif estado == "bodega_1":
         pantalla.blit(imagen_bodega, (0, 0))
-        fuente_nivel = pygame.font.SysFont(None, 50)
+        fuente_nivel = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 50)
         texto_nivel = fuente_nivel.render(f"Bodega {indice_nivel + 1}", True, (50, 50, 50))
         pantalla.blit(texto_nivel, (300, 40))
+
+        tiempo_transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
+        tiempo_restante = max(0, (tiempos_por_nivel[indice_nivel] - tiempo_transcurrido) // 1000)
+        fuente_tiempo = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36)
+        texto_tiempo = fuente_tiempo.render(f"Tiempo restante: {tiempo_restante}s", True, (255, 0, 0))
+        pantalla.blit(texto_tiempo, (550, 20))
+
+        if tiempo_transcurrido >= tiempos_por_nivel[indice_nivel]:
+            estado = "game_over"
 
         estante_ancho = 6 * (TAM_CELDA + MARGEN) + MARGEN
         estante_alto = 3 * (TAM_CELDA + MARGEN) + MARGEN
@@ -202,6 +227,7 @@ while corriendo:
                 elif figura == "△":
                     puntos = [(x + TAM_CELDA // 2, y + 10), (x + 10, y + TAM_CELDA - 10), (x + TAM_CELDA - 10, y + TAM_CELDA - 10)]
                     pygame.draw.polygon(pantalla, (100, 255, 100), puntos)
+        
 
         if arrastrando and pieza_seleccionada is not None:
             mx, my = pygame.mouse.get_pos()
@@ -216,7 +242,7 @@ while corriendo:
                 pygame.draw.polygon(pantalla, (100, 255, 100), puntos)
 
         if ganador:
-            fuente_ganador = pygame.font.SysFont(None, 72)
+            fuente_ganador = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
             texto_ganador = fuente_ganador.render("¡Ganaste!", True, (0, 128, 0))
             rect_ganador = texto_ganador.get_rect(center=(400, 550))
             pantalla.blit(texto_ganador, rect_ganador)
@@ -227,21 +253,33 @@ while corriendo:
                     bodega_1 = [fila[:] for fila in niveles[indice_nivel]]
                     ganador = False
                     tiempo_ganador = None
+                    tiempo_nivel_actual = pygame.time.get_ticks()
                 else:
                     estado = "fin"
+
     elif estado == "fin":
         pantalla.blit(imagen_fin, (0, 0))
-        fuente_fin = pygame.font.SysFont(None, 72)
+        fuente_fin = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
         texto_fin = fuente_fin.render("¡Completaste todas las bodegas!", True, (0, 128, 0))
         rect_fin = texto_fin.get_rect(center=(400, 200))
         pantalla.blit(texto_fin, rect_fin)
 
         boton_reinicio = pygame.Rect(300, 400, 200, 80)
         pygame.draw.rect(pantalla, (200, 50, 50), boton_reinicio)
+        texto_reiniciar = pygame.font.SysFont(None, 36).render("Reiniciar Juego", True, (255, 255, 255))
+        pantalla.blit(texto_reiniciar, texto_reiniciar.get_rect(center=boton_reinicio.center))
 
-        fuente_boton = pygame.font.SysFont(None, 36)
-        texto_reiniciar = fuente_boton.render("Reiniciar Juego", True, (255, 255, 255))
-        rect_texto = texto_reiniciar.get_rect(center=boton_reinicio.center)
-        pantalla.blit(texto_reiniciar, rect_texto)
+    elif estado == "game_over":
+        pantalla.fill((0, 0, 0))
+        fuente_go = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
+        texto_go = fuente_go.render("¡Se acabó el tiempo!", True, (255, 0, 0))
+        rect_go = texto_go.get_rect(center=(400, 200))
+        pantalla.blit(texto_go, rect_go)
+
+        boton_gameover = pygame.Rect(300, 400, 200, 80)
+        pygame.draw.rect(pantalla, (50, 50, 200), boton_gameover)
+        texto_retry = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Intentar de nuevo", True, (255, 255, 255))
+        pantalla.blit(texto_retry, texto_retry.get_rect(center=boton_gameover.center))
+
     pygame.display.flip()
 pygame.quit()
