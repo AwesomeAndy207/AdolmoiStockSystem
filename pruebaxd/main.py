@@ -317,13 +317,13 @@ while corriendo:
         cambiar_musica("fin")
         pantalla.blit(imagen_fin, (0, 0))
         fuente_fin = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
-        texto_fin = fuente_fin.render("¡Completaste todas las bodegas!", True, (0, 128, 0))
+        texto_fin = fuente_fin.render("¡Completaste todas las bodegas!", True, (204, 255, 0))
         rect_fin = texto_fin.get_rect(center=(400, 200))
         pantalla.blit(texto_fin, rect_fin)
 
         boton_reinicio = pygame.Rect(300, 400, 200, 80)
         pygame.draw.rect(pantalla, (200, 50, 50), boton_reinicio)
-        texto_reiniciar = pygame.font.SysFont(None, 36).render("Reiniciar Juego", True, (255, 255, 255))
+        texto_reiniciar = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Reiniciar Juego", True, (255, 255, 255))
         pantalla.blit(texto_reiniciar, texto_reiniciar.get_rect(center=boton_reinicio.center))
 
     elif estado == "game_over":
