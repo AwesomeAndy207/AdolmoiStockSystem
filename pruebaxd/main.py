@@ -43,6 +43,9 @@ imagen_instrucciones = pygame.transform.scale(imagen_instrucciones,(800, 600))
 imagen_fin = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\bodega interior 2.jpg").convert()
 imagen_fin = pygame.transform.scale(imagen_fin, (800, 600))
 
+imagen_gameover = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\Game over o time out.png").convert()
+imagen_gameover = pygame.transform.scale(imagen_gameover, (800, 600))
+
 estado = "intro"
 tiempo_inicio = pygame.time.get_ticks()
 
@@ -66,9 +69,9 @@ tiempos_por_nivel = [
     40000,  # Nivel 3 - 40s
     45000,  # Nivel 4 - 45s
     50000,  # Nivel 5 - 50s
-    50000,  # Nivel 6 - 50s
-    50000,  # Nivel 7 - 50s
-    50000   # Nivel 8 - 50s
+    45000,  # Nivel 6 - 45s
+    40000,  # Nivel 7 - 40s
+    30000   # Nivel 8 - 30s
 ]
 tiempo_nivel_actual = None
 
@@ -226,7 +229,7 @@ while corriendo:
             texto = fuente.render(linea, True, (204, 255, 0))
             pantalla.blit(texto, (50, 50 + i * 50))
 
-        boton_instrucciones = pygame.Rect(300, 450, 200, 80)
+        boton_instrucciones = pygame.Rect(300, 450, 300, 80)
         pygame.draw.rect(pantalla, (0, 143, 80), boton_instrucciones)
         texto_boton = fuente.render("Comenzar de una vez", True, (255, 255, 255))
         texto_rect = texto_boton.get_rect(center=boton_instrucciones.center)
@@ -328,14 +331,14 @@ while corriendo:
 
     elif estado == "game_over":
         reproducir_musica("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Game Over.mp3", bucle=False)
-        pantalla.fill((0, 0, 0))
+        pantalla.blit(imagen_gameover, (0, 0))
         fuente_go = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
         texto_go = fuente_go.render("¡Se acabó el tiempo!", True, (255, 0, 0))
         rect_go = texto_go.get_rect(center=(400, 200))
         pantalla.blit(texto_go, rect_go)
 
-        boton_gameover = pygame.Rect(300, 400, 200, 80)
-        pygame.draw.rect(pantalla, (50, 50, 200), boton_gameover)
+        boton_gameover = pygame.Rect(300, 400, 300, 80)
+        pygame.draw.rect(pantalla, (100, 100, 200), boton_gameover)
         texto_retry = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Intentar de nuevo", True, (255, 255, 255))
         pantalla.blit(texto_retry, texto_retry.get_rect(center=boton_gameover.center))
     pygame.display.flip()
