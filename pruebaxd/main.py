@@ -229,7 +229,7 @@ while corriendo:
             texto = fuente.render(linea, True, (204, 255, 0))
             pantalla.blit(texto, (50, 50 + i * 50))
 
-        boton_instrucciones = pygame.Rect(300, 450, 300, 80)
+        boton_instrucciones = pygame.Rect(250, 450, 300, 80)
         pygame.draw.rect(pantalla, (0, 143, 80), boton_instrucciones)
         texto_boton = fuente.render("Comenzar de una vez", True, (255, 255, 255))
         texto_rect = texto_boton.get_rect(center=boton_instrucciones.center)
@@ -251,19 +251,25 @@ while corriendo:
         else:
             cambiar_musica("nivel")
         pantalla.blit(imagen_bodega, (0, 0))
-        fuente_nivel = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 50)
+        fuente_nivel = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 100)
         texto_nivel = fuente_nivel.render(f"Bodega {indice_nivel + 1}", True, (50, 50, 50))
-        pantalla.blit(texto_nivel, (300, 40))
+        rect_nivel = texto_nivel.get_rect(center=(400, 40))
+        pantalla.blit(texto_nivel, rect_nivel)
 
         if not ganador:
             tiempo_transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
         else:
             tiempo_transcurrido = tiempos_por_nivel[indice_nivel]
         tiempo_restante = max(0, (tiempos_por_nivel[indice_nivel] - tiempo_transcurrido) // 1000)
-        fuente_tiempo = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36)
-        texto_tiempo = fuente_tiempo.render(f"Tiempo restante: {tiempo_restante}s", True, (255, 0, 0))
-        pantalla.blit(texto_tiempo, (550, 20))
-
+        if not ganador:
+            tiempo_transcurrido = pygame.time.get_ticks() - tiempo_nivel_actual
+        else:
+            tiempo_transcurrido = tiempos_por_nivel[indice_nivel]
+        tiempo_restante = max(0, (tiempos_por_nivel[indice_nivel] - tiempo_transcurrido) // 1000)
+        color_tiempo = (255, 0, 0) if tiempo_restante <= 15 else (0, 255, 0)
+        fuente_tiempo = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 60)
+        texto_tiempo = fuente_tiempo.render(f"Tiempo restante: {tiempo_restante}s", True, color_tiempo)
+        pantalla.blit(texto_tiempo, (300, 70))
         if not ganador and tiempo_transcurrido >= tiempos_por_nivel[indice_nivel]:
             estado = "game_over"
 
@@ -337,7 +343,7 @@ while corriendo:
         rect_go = texto_go.get_rect(center=(400, 200))
         pantalla.blit(texto_go, rect_go)
 
-        boton_gameover = pygame.Rect(300, 400, 300, 80)
+        boton_gameover = pygame.Rect(250, 400, 300, 80)
         pygame.draw.rect(pantalla, (100, 100, 200), boton_gameover)
         texto_retry = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Intentar de nuevo", True, (255, 255, 255))
         pantalla.blit(texto_retry, texto_retry.get_rect(center=boton_gameover.center))
