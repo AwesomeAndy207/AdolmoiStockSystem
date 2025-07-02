@@ -65,6 +65,10 @@ sprite_circulo = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\prue
 sprite_cuadrado = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\sprites\\cuadrado.png").convert_alpha()
 sprite_triangulo = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\sprites\\triangulo.png").convert_alpha()
 
+etiqueta_circulo = pygame.transform.scale(sprite_circulo, (40, 40))
+etiqueta_cuadrado = pygame.transform.scale(sprite_cuadrado, (40, 40))
+etiqueta_triangulo = pygame.transform.scale(sprite_triangulo, (40, 40))
+
 estado = "intro"
 tiempo_inicio = pygame.time.get_ticks()
 
@@ -294,6 +298,13 @@ while corriendo:
         pygame.draw.rect(pantalla, (139, 69, 19), (ORIGEN_X - MARGEN, ORIGEN_Y - MARGEN, estante_ancho, estante_alto))
 
         for fila in range(3):
+            y = ORIGEN_Y + fila * (TAM_CELDA + MARGEN) + (TAM_CELDA - 40) // 2
+            if fila == 0:
+                pantalla.blit(etiqueta_circulo, (ORIGEN_X - 50, y))
+            elif fila == 1:
+                pantalla.blit(etiqueta_cuadrado, (ORIGEN_X - 50, y))
+            elif fila == 2:
+                pantalla.blit(etiqueta_triangulo, (ORIGEN_X - 50, y))
             for col in range(6):
                 x = ORIGEN_X + col * (TAM_CELDA + MARGEN)
                 y = ORIGEN_Y + fila * (TAM_CELDA + MARGEN)
