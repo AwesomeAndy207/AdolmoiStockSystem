@@ -61,6 +61,10 @@ imagen_fin = pygame.transform.scale(imagen_fin, (800, 600))
 imagen_gameover = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\Game over o time out.png").convert()
 imagen_gameover = pygame.transform.scale(imagen_gameover, (800, 600))
 
+sprite_circulo = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\sprites\\circulo.png").convert_alpha()
+sprite_cuadrado = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\sprites\\cuadrado.png").convert_alpha()
+sprite_triangulo = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\sprites\\triangulo.png").convert_alpha()
+
 estado = "intro"
 tiempo_inicio = pygame.time.get_ticks()
 
@@ -232,9 +236,6 @@ while corriendo:
         instrucciones = [
             "Instrucciones",
             "- Arrastra las formas en los estantes que van",
-            "   Círculo va en la fila de más arriba",
-            "   Cuadrado va en la fila del medio",
-            "   Triángulo va en la fila de más abajo",
             "- Cada figura solo puede colocarse en su fila correcta",
             "- Ganas cuando todas las formas están en su lugar",
             "- No dejes que se te acabe el tiempo"
@@ -301,25 +302,25 @@ while corriendo:
 
                 figura = bodega_1[fila][col]
                 if figura == "○":
-                    pygame.draw.circle(pantalla, (0, 150, 255), (x + TAM_CELDA // 2, y + TAM_CELDA // 2), 25)
+                    pantalla.blit(sprite_circulo, (x, y))
                 elif figura == "□":
-                    pygame.draw.rect(pantalla, (255, 100, 100), (x + 15, y + 15, 50, 50))
+                    pantalla.blit(sprite_cuadrado, (x, y))
                 elif figura == "△":
-                    puntos = [(x + TAM_CELDA // 2, y + 10), (x + 10, y + TAM_CELDA - 10), (x + TAM_CELDA - 10, y + TAM_CELDA - 10)]
-                    pygame.draw.polygon(pantalla, (100, 255, 100), puntos)
+                    pantalla.blit(sprite_triangulo, (x, y))
+
         
 
         if arrastrando and pieza_seleccionada is not None:
             mx, my = pygame.mouse.get_pos()
             x_dibujo = mx - pos_relativa_mouse[0]
             y_dibujo = my - pos_relativa_mouse[1]
+
             if pieza_seleccionada == "○":
-                pygame.draw.circle(pantalla, (0, 150, 255), (x_dibujo + TAM_CELDA // 2, y_dibujo + TAM_CELDA // 2), 25)
+                pantalla.blit(sprite_circulo, (x_dibujo, y_dibujo))
             elif pieza_seleccionada == "□":
-                pygame.draw.rect(pantalla, (255, 100, 100), (x_dibujo + 15, y_dibujo + 15, 50, 50))
+                pantalla.blit(sprite_cuadrado, (x_dibujo, y_dibujo))
             elif pieza_seleccionada == "△":
-                puntos = [(x_dibujo + TAM_CELDA // 2, y_dibujo + 10), (x_dibujo + 10, y_dibujo + TAM_CELDA - 10), (x_dibujo + TAM_CELDA - 10, y_dibujo + TAM_CELDA - 10)]
-                pygame.draw.polygon(pantalla, (100, 255, 100), puntos)
+                pantalla.blit(sprite_triangulo, (x_dibujo, y_dibujo))
 
         if ganador:
             fuente_ganador = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
