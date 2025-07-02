@@ -88,13 +88,13 @@ ORIGEN_X = 100
 ORIGEN_Y = 150
 tiempos_por_nivel = [
     35000,  # Nivel 1 - 35s
-    35000,  # Nivel 2 - 35s
-    40000,  # Nivel 3 - 40s
-    45000,  # Nivel 4 - 45s
-    50000,  # Nivel 5 - 50s
-    40000,  # Nivel 6 - 40s
-    40000,  # Nivel 7 - 40s
-    30000   # Nivel 8 - 30s
+    30000,  # Nivel 2 - 30s
+    30000,  # Nivel 3 - 30s
+    30000,  # Nivel 4 - 30s
+    30000,  # Nivel 5 - 30s
+    35000,  # Nivel 6 - 35s
+    30000,  # Nivel 7 - 40s
+    25000   # Nivel 8 - 25s
 ]
 tiempo_nivel_actual = None
 
