@@ -24,6 +24,21 @@ def reproducir_musica(ruta, bucle=True, volumen=0.5):
         pygame.mixer.music.play(-1 if bucle else 0)
         musica_actual = ruta
 
+def obtener_rango(indice_nivel, ganador):
+    if ganador:
+        return "Reponedor legendario"
+    rangos = [
+        "Pésimo reponedor",
+        "Reponedor mediocre",
+        "Reponedor regular",
+        "Reponedor ordinario",
+        "Reponedor decente",
+        "Reponedor bueno",
+        "Reponedor muy bueno",
+        "Reponedor casi perfecto"
+    ]
+    return rangos[min(indice_nivel, len(rangos) - 1)]
+
 fuente_personalizada = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
 pantalla = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Adolmoi Stock System")
@@ -69,7 +84,7 @@ tiempos_por_nivel = [
     40000,  # Nivel 3 - 40s
     45000,  # Nivel 4 - 45s
     50000,  # Nivel 5 - 50s
-    45000,  # Nivel 6 - 45s
+    40000,  # Nivel 6 - 40s
     40000,  # Nivel 7 - 40s
     30000   # Nivel 8 - 30s
 ]
@@ -216,7 +231,7 @@ while corriendo:
         fuente = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 40)
         instrucciones = [
             "Instrucciones",
-            "- Arrastra las formas en los estantes que corresponden",
+            "- Arrastra las formas en los estantes que van",
             "   Círculo va en la fila de más arriba",
             "   Cuadrado va en la fila del medio",
             "   Triángulo va en la fila de más abajo",
@@ -226,7 +241,7 @@ while corriendo:
         ]
 
         for i, linea in enumerate(instrucciones):
-            texto = fuente.render(linea, True, (204, 255, 0))
+            texto = fuente.render(linea, True, (255, 255, 0))
             pantalla.blit(texto, (50, 50 + i * 50))
 
         boton_instrucciones = pygame.Rect(250, 450, 300, 80)
@@ -323,6 +338,8 @@ while corriendo:
                     estado = "fin"
 
     elif estado == "fin":
+        tiempo_estado = pygame.time.get_ticks()
+        sonido_rango_reproducido = False
         cambiar_musica("fin")
         pantalla.blit(imagen_fin, (0, 0))
         fuente_fin = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
@@ -330,12 +347,20 @@ while corriendo:
         rect_fin = texto_fin.get_rect(center=(400, 200))
         pantalla.blit(texto_fin, rect_fin)
 
+
+        rango = obtener_rango(indice_nivel, ganador=True)
+        fuente_rango = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 60)
+        texto_rango = fuente_rango.render(f"RANGO: {rango}", True, (255, 255, 255))
+        rect_rango = texto_rango.get_rect(midtop=(rect_fin.centerx, rect_fin.bottom + 10))
+        pantalla.blit(texto_rango, rect_rango)
         boton_reinicio = pygame.Rect(300, 400, 200, 80)
         pygame.draw.rect(pantalla, (200, 50, 50), boton_reinicio)
         texto_reiniciar = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Reiniciar Juego", True, (255, 255, 255))
         pantalla.blit(texto_reiniciar, texto_reiniciar.get_rect(center=boton_reinicio.center))
 
     elif estado == "game_over":
+        tiempo_estado = pygame.time.get_ticks()
+        sonido_rango_reproducido = False
         reproducir_musica("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\musica\\Game Over.mp3", bucle=False)
         pantalla.blit(imagen_gameover, (0, 0))
         fuente_go = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 72)
@@ -343,6 +368,12 @@ while corriendo:
         rect_go = texto_go.get_rect(center=(400, 200))
         pantalla.blit(texto_go, rect_go)
 
+
+        rango = obtener_rango(indice_nivel, ganador=False)
+        fuente_rango = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 60)
+        texto_rango = fuente_rango.render(f"RANGO: {rango}", True, (255, 165, 0))
+        rect_rango = texto_rango.get_rect(midtop=(rect_go.centerx, rect_go.bottom + 10))
+        pantalla.blit(texto_rango, rect_rango)
         boton_gameover = pygame.Rect(250, 400, 300, 80)
         pygame.draw.rect(pantalla, (100, 100, 200), boton_gameover)
         texto_retry = pygame.font.Font("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\fonts\\m5x7.ttf", 36).render("Intentar de nuevo", True, (255, 255, 255))
