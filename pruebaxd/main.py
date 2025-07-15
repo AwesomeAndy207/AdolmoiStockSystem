@@ -52,7 +52,7 @@ imagen_titulo = pygame.transform.scale(imagen_titulo, (800, 600))
 imagen_bodega = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\pared.jpg").convert()
 imagen_bodega = pygame.transform.scale(imagen_bodega, (800, 600))
 
-imagen_instrucciones = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\bodega interior.jpg").convert()
+imagen_instrucciones = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\pruebaxd\\assets\\bodega interior.png").convert()
 imagen_instrucciones = pygame.transform.scale(imagen_instrucciones,(800, 600))
 
 imagen_fin = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\bodega interior 2.jpg").convert()
@@ -246,7 +246,7 @@ while corriendo:
         ]
 
         for i, linea in enumerate(instrucciones):
-            texto = fuente.render(linea, True, (255, 255, 0))
+            texto = fuente.render(linea, True, (255, 255, 255))
             pantalla.blit(texto, (50, 50 + i * 50))
 
         boton_instrucciones = pygame.Rect(250, 450, 300, 80)
