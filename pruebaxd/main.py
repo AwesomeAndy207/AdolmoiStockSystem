@@ -55,7 +55,7 @@ imagen_bodega = pygame.transform.scale(imagen_bodega, (800, 600))
 imagen_instrucciones = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\pruebaxd\\assets\\bodega interior.png").convert()
 imagen_instrucciones = pygame.transform.scale(imagen_instrucciones,(800, 600))
 
-imagen_fin = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\bodega interior 2.jpg").convert()
+imagen_fin = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\bodega interior 2.png").convert()
 imagen_fin = pygame.transform.scale(imagen_fin, (800, 600))
 
 imagen_gameover = pygame.image.load("C:\\Users\\andyo\\OneDrive\\Escritorio\\pruebaxd\\assets\\Game over o time out.png").convert()
